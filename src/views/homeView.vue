@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-gradient-to-b from-slate-700 to-gray-900 h-[100vh] py-[150px] px-[30px] sm:px-[50px] md:px-[50px] lg:px-[100px]"
+        class="bg-gradient-to-b from-slate-700 to-gray-900 h-[100vw] py-[150px] px-[30px] sm:px-[50px] md:px-[50px] lg:px-[100px]"
     >
         <div
             class="flex justify-start md:items-center flex-col lg:flex-row w-full"
@@ -41,5 +41,46 @@
             </div>
             <div></div>
         </div>
+
+        <div
+            class="flex justify-center font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mt-32"
+        >
+            Upcoming events
+        </div>
+        <div class="grid grid-cols-3 mt-16">
+            <eventCard
+                v-for="event in events"
+                :key="event.id"
+                :name="event.eventName"
+                :category="event.category"
+                :desc="event.description"
+                :location="event.location"
+                :date="event.date"
+                :time="event.time"
+            />
+        </div>
     </div>
 </template>
+
+<script>
+import eventCard from '/src/components/eventCard.vue'
+import axios from 'axios'
+
+export default {
+    name: 'homeView',
+    data() {
+        return {
+            events: [],
+        }
+    },
+    components: {
+        eventCard,
+    },
+    async mounted() {
+        await axios.get('http://localhost:3100/events').then((response) => {
+            this.events = response.data
+            console.log(response.data)
+        })
+    },
+}
+</script>
